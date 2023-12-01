@@ -2,7 +2,7 @@
 	"DayN": {
 		"prefix": "day",
 		"body": [
-			"// @Command(name = \"${TM_FILENAME_BASE}\", mixinStandardHelpOptions = true)",
+			"// @Command(name = \"${TM_FILENAME_BASE/.*/${0:/downcase}/}\", mixinStandardHelpOptions = true)",
 			"",
 			"  @Option(names = {\"-part1\"})",
 			"  private boolean puzzleOne;",
