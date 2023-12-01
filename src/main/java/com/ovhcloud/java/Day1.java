@@ -2,6 +2,8 @@ package com.ovhcloud.java;
 
 import java.util.Scanner;
 import java.util.concurrent.Callable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import com.ovhcloud.java.util.FileOperations;
 import com.ovhcloud.java.util.PuzzleInputs;
 import picocli.CommandLine.Command;
@@ -15,6 +17,10 @@ public class Day1 implements Callable<Integer> {
 
   @Option(names = {"-part2"})
   private boolean puzzleTwo;
+
+  Matcher matcherFirst = null;
+  Matcher matcherLast = null;
+
 
   @Override
   public Integer call() throws Exception {
@@ -32,24 +38,8 @@ public class Day1 implements Callable<Integer> {
     int count = 0;
 
     Scanner scanner = new Scanner(FileOperations.loadInputs(PuzzleInputs.INPUT1_1));
-
-    String line;
-    char first;
-    char second;
     while (scanner.hasNextLine()) {
-      line = scanner.nextLine();
-      int j = 0;
-      while (j < line.length() && !Character.isDigit(line.charAt(j))) {
-        j++;
-      }
-      first = line.charAt(j);
-      int k = line.length() - 1;
-      while (!Character.isDigit(line.charAt(k))) {
-        k--;
-      }
-      second = line.charAt(k);
-
-      count += Integer.parseInt("" + first + second);
+      count += giveMagicNumber(scanner.nextLine());
     }
 
     scanner.close();
@@ -64,40 +54,33 @@ public class Day1 implements Callable<Integer> {
     Scanner scanner = new Scanner(FileOperations.loadInputs(PuzzleInputs.INPUT1_2));
 
     String line;
-    char first;
-    char second;
     while (scanner.hasNextLine()) {
       line = scanner.nextLine();
-      System.out.println("line: " + line);
 
-      line = line.replace("one", "o1e");
-      line = line.replace("two", "t2o");
-      line = line.replace("three", "t3e");
-      line = line.replace("four", "f4r");
-      line = line.replace("five", "f5e");
-      line = line.replace("six", "s6x");
-      line = line.replace("seven", "s7n");
-      line = line.replace("eight", "e8t");
-      line = line.replace("nine", "n9e");
+      line = line.replace("one", "o1e")
+        .replace("two", "t2o")
+        .replace("three", "t3e")
+        .replace("four", "f4r")
+        .replace("five", "f5e")
+        .replace("six", "s6x")
+        .replace("seven", "s7n")
+        .replace("eight", "e8t")
+        .replace("nine", "n9e");
 
-      System.out.println("line: " + line);
-
-      int j = 0;
-      while (j < line.length() && !Character.isDigit(line.charAt(j))) {
-        j++;
-      }
-      first = line.charAt(j);
-      int k = line.length() - 1;
-      while (!Character.isDigit(line.charAt(k))) {
-        k--;
-      }
-      second = line.charAt(k);
-
-      count += Integer.parseInt("" + first + second);
+      count += giveMagicNumber(line);
     }
 
     scanner.close();
 
     System.out.println("Result Day1 part2: " + count);
+  }
+
+  private int giveMagicNumber(String line) {
+
+    matcherFirst = Pattern.compile("^[^\\d]*(\\d)").matcher(line);
+    matcherLast = Pattern.compile("(\\d)(?!.*\\d)").matcher(line);
+    matcherFirst.find();
+    matcherLast.find();
+    return Integer.parseInt(matcherFirst.group(1) + matcherLast.group());
   }
 }
