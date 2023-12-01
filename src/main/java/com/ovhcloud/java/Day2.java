@@ -1,15 +1,11 @@
-# advent-of-code-2023
-
-To create a subcommand for advent of code:
-```java
 package com.ovhcloud.java;
 
 import java.util.concurrent.Callable;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
-@Command(name = "dayN", mixinStandardHelpOptions = true)
-public class DayN implements Callable<Integer> {
+@Command(name = "day2", mixinStandardHelpOptions = true)
+public class Day2 implements Callable<Integer> {
 
   @Option(names = {"-part1"})
   private boolean puzzleOne;
@@ -33,5 +29,3 @@ public class DayN implements Callable<Integer> {
 
   private void puzzle2() {}
 }
-
-```
