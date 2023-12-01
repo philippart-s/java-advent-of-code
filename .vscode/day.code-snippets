@@ -1,0 +1,32 @@
+{
+	"DayN": {
+		"prefix": "day",
+		"body": [
+			"// @Command(name = \"${TM_FILENAME_BASE}\", mixinStandardHelpOptions = true)",
+			"",
+			"  @Option(names = {\"-part1\"})",
+			"  private boolean puzzleOne;",
+			"",
+			"  @Option(names = {\"-part2\"})",
+			"  private boolean puzzleTwo;",
+			"",
+			"  @Override",
+			"  public Integer call() throws Exception {",
+			"    if (puzzleOne) {",
+			"      puzzle1();",
+			"    }",
+			"    if (puzzleTwo) {",
+			"      puzzle2();",
+			"    }",
+			"",
+			"    return 0;",
+			"  }",
+			"",
+			"  private void puzzle1() {}",
+			"",
+			"  private void puzzle2() {}",
+			""
+		],
+		"description": "DayN"
+	}
+}
