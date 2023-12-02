@@ -5,20 +5,20 @@ import org.junit.jupiter.api.Test;
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
-class Day2Test {
+class Day4Test {
 
   @Test
   void testPuzzleOne() {
-    int result = new Day2().puzzle1("/input-day2-test.txt");
+    int result = new Day4().puzzle1("/input-day4-test.txt");
 
-    Assertions.assertEquals(8, result);
+    Assertions.assertEquals(0, result);
   }
 
-    @Test
+  @Test
   void testPuzzleTwo() {
-    int result = new Day2().puzzle2("/input-day2-test.txt");
+    int result = new Day4().puzzle2("/input-day4-test.txt");
 
-    Assertions.assertEquals(2286, result);
+    Assertions.assertEquals(0, result);
   }
 
 }

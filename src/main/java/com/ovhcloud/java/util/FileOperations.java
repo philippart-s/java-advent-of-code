@@ -4,7 +4,7 @@ import java.io.InputStream;
 
 public class FileOperations {
 
-  public static InputStream loadInputs(PuzzleInputs input) {
-    return FileOperations.class.getResourceAsStream(input.label);
+  public static InputStream loadInputs(String inputName) {
+    return FileOperations.class.getResourceAsStream(inputName);
   }
 }

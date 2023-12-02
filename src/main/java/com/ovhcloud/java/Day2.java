@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
 import com.ovhcloud.java.util.FileOperations;
-import com.ovhcloud.java.util.PuzzleInputs;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
@@ -21,16 +20,16 @@ public class Day2 implements Callable<Integer> {
   @Override
   public Integer call() throws Exception {
     if (puzzleOne) {
-      puzzle1(PuzzleInputs.INPUT2_1);
+      puzzle1("/input-day2-1.txt");
     }
     if (puzzleTwo) {
-      puzzle2(PuzzleInputs.INPUT2_2);
+      puzzle2("/input-day2-2.txt");
     }
 
     return 0;
   }
 
-  int puzzle1(PuzzleInputs input) {
+  int puzzle1(String input) {
     int count = 0;
     int idx = 1;
 
@@ -41,11 +40,13 @@ public class Day2 implements Callable<Integer> {
       }
       idx++;
     }
+    scanner.close();
+    
     System.out.println("Result: " + count);
     return count;
   }
 
-  int puzzle2(PuzzleInputs input) {
+  int puzzle2(String input) {
     int count = 0;
     HashMap<String, Integer> cubesMap = null;
 

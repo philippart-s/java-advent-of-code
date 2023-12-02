@@ -5,7 +5,6 @@ import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.ovhcloud.java.util.FileOperations;
-import com.ovhcloud.java.util.PuzzleInputs;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
@@ -37,7 +36,7 @@ public class Day1 implements Callable<Integer> {
   private void puzzle1() {
     int count = 0;
 
-    Scanner scanner = new Scanner(FileOperations.loadInputs(PuzzleInputs.INPUT1_1));
+    Scanner scanner = new Scanner(FileOperations.loadInputs("input-day1-1.txt"));
     while (scanner.hasNextLine()) {
       count += giveMagicNumber(scanner.nextLine());
     }
@@ -51,7 +50,7 @@ public class Day1 implements Callable<Integer> {
   private void puzzle2() {
     int count = 0;
 
-    Scanner scanner = new Scanner(FileOperations.loadInputs(PuzzleInputs.INPUT1_2));
+    Scanner scanner = new Scanner(FileOperations.loadInputs("input-day2-2.txt"));
 
     String line;
     while (scanner.hasNextLine()) {
