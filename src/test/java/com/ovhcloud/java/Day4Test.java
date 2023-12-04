@@ -11,14 +11,14 @@ class Day4Test {
   void testPuzzleOne() {
     int result = new Day4().puzzle1("/input-day4-test.txt");
 
-    Assertions.assertEquals(0, result);
+    Assertions.assertEquals(13, result);
   }
 
   @Test
   void testPuzzleTwo() {
     int result = new Day4().puzzle2("/input-day4-test.txt");
 
-    Assertions.assertEquals(0, result);
+    Assertions.assertEquals(30, result);
   }
 
 }
