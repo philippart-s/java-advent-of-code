@@ -5,7 +5,7 @@ import io.quarkus.picocli.runtime.annotations.TopCommand;
 import picocli.CommandLine.Command;
 
 @TopCommand
-@Command(name = "aoc", mixinStandardHelpOptions = true, subcommands = {NewDay.class, Day1.class, Day2.class, Day3.class})
+@Command(name = "aoc", mixinStandardHelpOptions = true, subcommands = {NewDay.class, Day1.class, Day2.class, Day3.class, Day4.class})
 public class AdventOfCode implements Callable<Integer> {
 
     @Override
