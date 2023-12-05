@@ -103,21 +103,21 @@ public class NewDay implements Callable<Integer> {
   @Override
   public Integer call() throws Exception {
     String unitTestFile =
-        UNIT_TEST.replace("dayN", day.toLowerCase()).replace("DayN", "Day4").replace("INPUTN", "INPUT" + day.substring(3));
+        UNIT_TEST.replace("dayN", day.toLowerCase()).replace("DayN", day).replace("INPUTN", "INPUT" + day.substring(3));
     Files.write(Paths.get(
-        "/Users/stef/Dev/java-advent-of-code/src/test/java/com/ovhcloud/java/" + day + "Test.java"),
+        "/Users/sphilipp/dev/other/java-advent-of-code/src/test/java/com/ovhcloud/java/" + day + "Test.java"),
         unitTestFile.getBytes());
 
     String dayFile = DAY_CLASS.replace("dayN", day.toLowerCase()).replace("DayN", day)
         .replace("INPUTN", "INPUT" + day.substring(3));
     Files.write(
         Paths.get(
-            "/Users/stef/Dev/java-advent-of-code/src/main/java/com/ovhcloud/java/" + day + ".java"),
+            "/Users/sphilipp/dev/other/java-advent-of-code/src/main/java/com/ovhcloud/java/" + day + ".java"),
         dayFile.getBytes());
 
-    Files.createFile(Paths.get( "/Users/stef/Dev/java-advent-of-code/src/main/resources/input-" + day.toLowerCase() + "-1.txt"));
-    Files.createFile(Paths.get( "/Users/stef/Dev/java-advent-of-code/src/main/resources/input-" + day.toLowerCase() + "-2.txt"));
-    Files.createFile(Paths.get( "/Users/stef/Dev/java-advent-of-code/src/main/resources/input-" + day.toLowerCase() + "-test.txt"));
+    Files.createFile(Paths.get( "/Users/sphilipp/dev/other/java-advent-of-code/src/main/resources/input-" + day.toLowerCase() + "-1.txt"));
+    Files.createFile(Paths.get( "/Users/sphilipp/dev/other/java-advent-of-code/src/main/resources/input-" + day.toLowerCase() + "-2.txt"));
+    Files.createFile(Paths.get( "/Users/sphilipp/dev/other/java-advent-of-code/src/main/resources/input-" + day.toLowerCase() + "-test.txt"));
 
     return 0;
   }
