@@ -34,21 +34,32 @@ public class Day5 implements Callable<Integer> {
     return 0;
   }
 
-  private List<List<Integer>> extractListOfList(List<String> inputList) {
-    List<List<Integer>> res = new ArrayList<>();
+  private List<AlmanacMap> extractListOfMap(List<String> inputList) {
+    List<AlmanacMap> res = new ArrayList<>();
     i = i + 2;
 
+    String[] elements;
     while (i < inputList.size() && !inputList.get(i).trim().isEmpty()) {
-      res.add(Arrays.stream(inputList.get(i).split("\\D+"))
-          .filter(number -> !number.isEmpty()).mapToInt(Integer::parseInt).boxed().toList());
+      elements = inputList.get(i).split("\\D+");
+      res.add(new AlmanacMap(Long.parseLong(elements[0]), Long.parseLong(elements[1]),
+          Long.parseLong(elements[2])));
       i++;
-    }    
+    }
     return res;
   }
 
+  private long nextDestination(List<AlmanacMap> almanacMaps, Long seed) {
+    long currentDestination = seed;
+    for (AlmanacMap almanacMap : almanacMaps) {
+      if (seed >= almanacMap.source && seed <= almanacMap.source + almanacMap.length) {
+        currentDestination = seed - almanacMap.source + almanacMap.destination;
+        break;
+      }
+    }
+    return currentDestination;
+  }
 
-  int puzzle1(String input) {
-    int count = 0;
+  long puzzle1(String input) {
     Scanner scanner = new Scanner(FileOperations.loadInputs(input));
     String currentLine;
     ArrayList<String> inputAsArrayList = new ArrayList<String>();
@@ -60,40 +71,58 @@ public class Day5 implements Callable<Integer> {
 
     // List of seeds
     String[] seeds = inputAsArrayList.get(0).split(":")[1].split("\\D+");
-    List<Integer> arrayOfSeeds = Arrays.stream(seeds).filter(number -> !number.isEmpty())
-        .mapToInt(Integer::parseInt).boxed().toList();
-    System.out.println("arrayOfSeeds: " + arrayOfSeeds);
+    List<Long> arrayOfSeeds = Arrays.stream(seeds).filter(number -> !number.isEmpty())
+        .mapToLong(Long::parseLong).boxed().toList();
+    //System.out.println("arrayOfSeeds: " + arrayOfSeeds);
 
     // List of seed-to-soil
-    List<List<Integer>> seedsToSoilList = extractListOfList(inputAsArrayList);
-    System.out.println("seedsToSoilList: " + seedsToSoilList);
+    List<AlmanacMap> seedsToSoilList = extractListOfMap(inputAsArrayList);
+    //System.out.println("seedsToSoilList: " + seedsToSoilList);
 
-    // List of soil-to-fertilizer 
-    List<List<Integer>> soilsToFertilizerList = extractListOfList(inputAsArrayList);
-    System.out.println("soilsToFertilizerList: " + soilsToFertilizerList);
+    // List of soil-to-fertilizer
+    List<AlmanacMap> soilsToFertilizerList = extractListOfMap(inputAsArrayList);
+    //System.out.println("soilsToFertilizerList: " + soilsToFertilizerList);
 
-    // List of fertilizer-to-water 
-    List<List<Integer>> fertilizerToWaterList = extractListOfList(inputAsArrayList);
-    System.out.println("fertilizerToWaterList: " + fertilizerToWaterList);
+    // List of fertilizer-to-water
+    List<AlmanacMap> fertilizerToWaterList = extractListOfMap(inputAsArrayList);
+    //System.out.println("fertilizerToWaterList: " + fertilizerToWaterList);
 
-    // List of water-to-light 
-    List<List<Integer>> waterToLightList = extractListOfList(inputAsArrayList);
-    System.out.println("waterToLightList: " + waterToLightList);
+    // List of water-to-light
+    List<AlmanacMap> waterToLightList = extractListOfMap(inputAsArrayList);
+    //System.out.println("waterToLightList: " + waterToLightList);
 
-    // List of light-to-temperature 
-    List<List<Integer>> lightToTemperatureList = extractListOfList(inputAsArrayList);
-    System.out.println("lightToTemperatureList: " + lightToTemperatureList);
+    // List of light-to-temperature
+    List<AlmanacMap> lightToTemperatureList = extractListOfMap(inputAsArrayList);
+    //System.out.println("lightToTemperatureList: " + lightToTemperatureList);
 
-    // List of temperature-to-humidity 
-    List<List<Integer>> temperatureToHumidityList = extractListOfList(inputAsArrayList);
-    System.out.println("temperatureToHumidityList: " + temperatureToHumidityList);
+    // List of temperature-to-humidity
+    List<AlmanacMap> temperatureToHumidityList = extractListOfMap(inputAsArrayList);
+    //System.out.println("temperatureToHumidityList: " + temperatureToHumidityList);
 
-    // List of temperature-to-humidity 
-    List<List<Integer>> humidityToLocationList = extractListOfList(inputAsArrayList);
-    System.out.println("humidityToLocationList: " + humidityToLocationList);
+    // List of temperature-to-humidity
+    List<AlmanacMap> humidityToLocationList = extractListOfMap(inputAsArrayList);
+    //System.out.println("humidityToLocationList: " + humidityToLocationList);
 
-    System.out.println("Result: " + count);
-    return 0;
+
+
+    long currentDestination = Long.MAX_VALUE;
+    long nextDestination = -1;
+    for (Long seed : arrayOfSeeds) {
+      nextDestination = nextDestination(seedsToSoilList, seed);
+      nextDestination = nextDestination(soilsToFertilizerList, nextDestination);
+      nextDestination = nextDestination(fertilizerToWaterList, nextDestination);
+      nextDestination = nextDestination(waterToLightList, nextDestination);
+      nextDestination = nextDestination(lightToTemperatureList, nextDestination);
+      nextDestination = nextDestination(temperatureToHumidityList, nextDestination);
+      nextDestination = nextDestination(humidityToLocationList, nextDestination);
+
+      if (nextDestination < currentDestination) {
+        currentDestination = nextDestination;
+      }
+    }
+
+    System.out.println("Result: " + currentDestination);
+    return currentDestination;
   }
 
   int puzzle2(String input) {
@@ -107,6 +136,22 @@ public class Day5 implements Callable<Integer> {
 
     System.out.println("Result: " + count);
     return 0;
+  }
+
+
+  class AlmanacMap {
+    long destination, source, length;
+
+    AlmanacMap(long destination, long source, long length) {
+      this.destination = destination;
+      this.source = source;
+      this.length = length;
+    }
+
+    @Override
+    public String toString() {
+      return "destination: " + destination + ", source: " + source + ", length: " + length;
+    }
   }
 }
 
