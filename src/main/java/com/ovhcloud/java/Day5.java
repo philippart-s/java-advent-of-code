@@ -51,7 +51,7 @@ public class Day5 implements Callable<Integer> {
   private long nextDestination(List<AlmanacMap> almanacMaps, Long seed) {
     long currentDestination = seed;
     for (AlmanacMap almanacMap : almanacMaps) {
-      if (seed >= almanacMap.source && seed <= almanacMap.source + almanacMap.length) {
+      if (seed >= almanacMap.source && seed < almanacMap.source + almanacMap.length) {
         currentDestination = seed - almanacMap.source + almanacMap.destination;
         break;
       }
@@ -73,40 +73,41 @@ public class Day5 implements Callable<Integer> {
     String[] seeds = inputAsArrayList.get(0).split(":")[1].split("\\D+");
     List<Long> arrayOfSeeds = Arrays.stream(seeds).filter(number -> !number.isEmpty())
         .mapToLong(Long::parseLong).boxed().toList();
-    //System.out.println("arrayOfSeeds: " + arrayOfSeeds);
+    System.out.println("arrayOfSeeds: " + arrayOfSeeds);
 
     // List of seed-to-soil
     List<AlmanacMap> seedsToSoilList = extractListOfMap(inputAsArrayList);
-    //System.out.println("seedsToSoilList: " + seedsToSoilList);
+    // System.out.println("seedsToSoilList: " + seedsToSoilList);
 
     // List of soil-to-fertilizer
     List<AlmanacMap> soilsToFertilizerList = extractListOfMap(inputAsArrayList);
-    //System.out.println("soilsToFertilizerList: " + soilsToFertilizerList);
+    // System.out.println("soilsToFertilizerList: " + soilsToFertilizerList);
 
     // List of fertilizer-to-water
     List<AlmanacMap> fertilizerToWaterList = extractListOfMap(inputAsArrayList);
-    //System.out.println("fertilizerToWaterList: " + fertilizerToWaterList);
+    // System.out.println("fertilizerToWaterList: " + fertilizerToWaterList);
 
     // List of water-to-light
     List<AlmanacMap> waterToLightList = extractListOfMap(inputAsArrayList);
-    //System.out.println("waterToLightList: " + waterToLightList);
+    // System.out.println("waterToLightList: " + waterToLightList);
 
     // List of light-to-temperature
     List<AlmanacMap> lightToTemperatureList = extractListOfMap(inputAsArrayList);
-    //System.out.println("lightToTemperatureList: " + lightToTemperatureList);
+    // System.out.println("lightToTemperatureList: " + lightToTemperatureList);
 
     // List of temperature-to-humidity
     List<AlmanacMap> temperatureToHumidityList = extractListOfMap(inputAsArrayList);
-    //System.out.println("temperatureToHumidityList: " + temperatureToHumidityList);
+    // System.out.println("temperatureToHumidityList: " + temperatureToHumidityList);
 
     // List of temperature-to-humidity
     List<AlmanacMap> humidityToLocationList = extractListOfMap(inputAsArrayList);
-    //System.out.println("humidityToLocationList: " + humidityToLocationList);
-
-
+    // System.out.println("humidityToLocationList: " + humidityToLocationList);
 
     long currentDestination = Long.MAX_VALUE;
     long nextDestination = -1;
+
+
+
     for (Long seed : arrayOfSeeds) {
       nextDestination = nextDestination(seedsToSoilList, seed);
       nextDestination = nextDestination(soilsToFertilizerList, nextDestination);
@@ -125,19 +126,83 @@ public class Day5 implements Callable<Integer> {
     return currentDestination;
   }
 
-  int puzzle2(String input) {
-    int count = 0;
 
-    /*
-     * Scanner scanner = new Scanner(FileOperations.loadInputs(input));
-     * 
-     * while (scanner.hasNextLine()) { // Put code here } scanner.close();
-     */
 
-    System.out.println("Result: " + count);
-    return 0;
+  long puzzle2(String input) {
+    Scanner scanner = new Scanner(FileOperations.loadInputs(input));
+    String currentLine;
+    ArrayList<String> inputAsArrayList = new ArrayList<String>();
+    while (scanner.hasNextLine()) {
+      currentLine = scanner.nextLine();
+      inputAsArrayList.add(currentLine);
+    }
+    scanner.close();
+
+    // List of seeds
+    String[] seeds = inputAsArrayList.get(0).split(":")[1].split("\\D+");
+    ArrayList<Seed> arrayOfSeeds = new ArrayList<>();
+    for (int idx = 1; idx < seeds.length; idx++) {
+      if (!seeds[idx].trim().isEmpty()) {
+        arrayOfSeeds.add(new Seed(Long.parseLong(seeds[idx]), Long.parseLong(seeds[idx + 1])));
+        idx++;
+      }
+    }
+
+    // List of seed-to-soil
+    List<AlmanacMap> seedsToSoilList = extractListOfMap(inputAsArrayList);
+    // System.out.println("seedsToSoilList: " + seedsToSoilList);
+
+    // List of soil-to-fertilizer
+    List<AlmanacMap> soilsToFertilizerList = extractListOfMap(inputAsArrayList);
+    // System.out.println("soilsToFertilizerList: " + soilsToFertilizerList);
+
+    // List of fertilizer-to-water
+    List<AlmanacMap> fertilizerToWaterList = extractListOfMap(inputAsArrayList);
+    // System.out.println("fertilizerToWaterList: " + fertilizerToWaterList);
+
+    // List of water-to-light
+    List<AlmanacMap> waterToLightList = extractListOfMap(inputAsArrayList);
+    // System.out.println("waterToLightList: " + waterToLightList);
+
+    // List of light-to-temperature
+    List<AlmanacMap> lightToTemperatureList = extractListOfMap(inputAsArrayList);
+    // System.out.println("lightToTemperatureList: " + lightToTemperatureList);
+
+    // List of temperature-to-humidity
+    List<AlmanacMap> temperatureToHumidityList = extractListOfMap(inputAsArrayList);
+    // System.out.println("temperatureToHumidityList: " + temperatureToHumidityList);
+
+    // List of temperature-to-humidity
+    List<AlmanacMap> humidityToLocationList = extractListOfMap(inputAsArrayList);
+    // System.out.println("humidityToLocationList: " + humidityToLocationList);
+
+    long currentDestination = Long.MAX_VALUE;
+    long nextDestination = -1;
+    long currentSeed = -1;
+    for (Seed seed : arrayOfSeeds) {
+      System.out.println("seed: " + seed);
+      currentSeed = seed.start;
+       for (long idx = 0; idx < seed.length; idx++) {
+        //System.out.println("idx: " + idx);
+        currentSeed = idx + seed.start;
+        //System.out.println("currentSeed: " + currentSeed);
+        nextDestination = nextDestination(seedsToSoilList, currentSeed);
+        nextDestination = nextDestination(soilsToFertilizerList, nextDestination);
+        nextDestination = nextDestination(fertilizerToWaterList, nextDestination);
+        nextDestination = nextDestination(waterToLightList, nextDestination);
+        nextDestination = nextDestination(lightToTemperatureList, nextDestination);
+        nextDestination = nextDestination(temperatureToHumidityList, nextDestination);
+        nextDestination = nextDestination(humidityToLocationList, nextDestination);
+
+        if (nextDestination < currentDestination) {
+          currentDestination = nextDestination;
+        }
+      }
+     }
+
+    System.out.println("Result: " + currentDestination);
+    return currentDestination;
   }
-
 
   class AlmanacMap {
     long destination, source, length;
@@ -151,6 +216,20 @@ public class Day5 implements Callable<Integer> {
     @Override
     public String toString() {
       return "destination: " + destination + ", source: " + source + ", length: " + length;
+    }
+  }
+
+  class Seed {
+    long start, length;
+
+    Seed(long start, long length) {
+      this.start = start;
+      this.length = length;
+    }
+
+    @Override
+    public String toString() {
+      return "start: " + start + ", length: " + length;
     }
   }
 }

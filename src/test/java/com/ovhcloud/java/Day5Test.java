@@ -16,9 +16,9 @@ class Day5Test {
 
   @Test
   void testPuzzleTwo() {
-    int result = new Day5().puzzle2("/input-day5-test.txt");
+    long result = new Day5().puzzle2("/input-day5-test.txt");
 
-    Assertions.assertEquals(0, result);
+    Assertions.assertEquals(46, result);
   }
 
 }
