@@ -46,14 +46,25 @@ public class Day6 implements Callable<Integer> {
     return races;
   }
 
+    private Race extractRaces2(String input) {
+    Scanner scanner = new Scanner(FileOperations.loadInputs(input));
+    String arrTime = scanner.nextLine().split(":")[1].replaceAll("\\s+", "").trim();
+    System.out.println("arrTime: " + arrTime);
+    String arrDistance = scanner.nextLine().split(":")[1].replaceAll("\\s+", "");
 
-  int puzzle1(String input) {
-    int count = 1;
+    scanner.close();
+
+    return new Race(Long.parseLong(arrTime), Long.parseLong(arrDistance));
+  }
+
+
+  long puzzle1(String input) {
+    long count = 1;
 
     List<Race> races = extractRaces(input); 
     System.out.println("Races: " + races);
-    int boatDistance = 0;
-    int wayToWin = 0;
+    long boatDistance = 0;
+    long wayToWin = 0;
     for (Race race : races) {
       for (int i = 1; i <= race.time; i++) {
         boatDistance = (race.time - i) * i;
@@ -72,19 +83,30 @@ public class Day6 implements Callable<Integer> {
     return count;
   }
 
-  int puzzle2(String input) {
-    int count = 0;
+  long puzzle2(String input) {
+    long count = 1;
 
-    /*
-     * Scanner scanner = new Scanner(FileOperations.loadInputs(input));
-     * 
-     * while (scanner.hasNextLine()) { // Put code here } scanner.close();
-     */
+    Race race = extractRaces2(input); 
+    System.out.println("Race: " + race);
+    long boatDistance = 0;
+    long wayToWin = 0;
+      for (int i = 1; i <= race.time; i++) {
+        boatDistance = (race.time - i) * i;
+        if (boatDistance > race.distance) {
+          wayToWin++;
+        }
+      }
+      if (wayToWin != 0) {
+        count = wayToWin * count;
+      }
+      wayToWin = 0;
+      
+
     System.out.println("Result: " + count);
-    return 0;
+    return count;
   }
 
-  record Race(int time, int distance) {
+  record Race(long time, long distance) {
   }
 
 }

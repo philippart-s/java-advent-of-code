@@ -9,16 +9,16 @@ class Day6Test {
 
   @Test
   void testPuzzleOne() {
-    int result = new Day6().puzzle1("/input-day6-test.txt");
+    long result = new Day6().puzzle1("/input-day6-test.txt");
 
     Assertions.assertEquals(288, result);
   }
 
   @Test
   void testPuzzleTwo() {
-    int result = new Day6().puzzle2("/input-day6-test.txt");
+    long result = new Day6().puzzle2("/input-day6-test.txt");
 
-    Assertions.assertEquals(0, result);
+    Assertions.assertEquals(71503, result);
   }
 
 }
