@@ -96,6 +96,7 @@ public class NewDay implements Callable<Integer> {
     
         """;
 
+    private final static String SOURCE_PATH = "/Users/sphilipp/dev/other/java-advent-of-code";
 
   @Parameters()
   private String day;
@@ -105,7 +106,7 @@ public class NewDay implements Callable<Integer> {
     String unitTestFile =
         UNIT_TEST.replace("dayN", day.toLowerCase()).replace("DayN", day).replace("INPUTN", "INPUT" + day.substring(3));
     Files.write(Paths.get(
-        "/Users/sphilipp/dev/other/java-advent-of-code/src/test/java/com/ovhcloud/java/" + day + "Test.java"),
+        SOURCE_PATH + "/src/test/java/com/ovhcloud/java/" + day + "Test.java"),
         unitTestFile.getBytes());
 
     String dayFile = DAY_CLASS.replace("dayN", day.toLowerCase()).replace("DayN", day)
@@ -115,9 +116,9 @@ public class NewDay implements Callable<Integer> {
             "/Users/sphilipp/dev/other/java-advent-of-code/src/main/java/com/ovhcloud/java/" + day + ".java"),
         dayFile.getBytes());
 
-    Files.createFile(Paths.get( "/Users/sphilipp/dev/other/java-advent-of-code/src/main/resources/input-" + day.toLowerCase() + "-1.txt"));
-    Files.createFile(Paths.get( "/Users/sphilipp/dev/other/java-advent-of-code/src/main/resources/input-" + day.toLowerCase() + "-2.txt"));
-    Files.createFile(Paths.get( "/Users/sphilipp/dev/other/java-advent-of-code/src/main/resources/input-" + day.toLowerCase() + "-test.txt"));
+    Files.createFile(Paths.get( SOURCE_PATH + "/src/main/resources/input-" + day.toLowerCase() + "-1.txt"));
+    Files.createFile(Paths.get( SOURCE_PATH + "/src/main/resources/input-" + day.toLowerCase() + "-2.txt"));
+    Files.createFile(Paths.get( SOURCE_PATH + "/src/main/resources/input-" + day.toLowerCase() + "-test.txt"));
 
     return 0;
   }
