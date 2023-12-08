@@ -1,10 +1,7 @@
 package com.ovhcloud.java;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
@@ -24,6 +21,8 @@ public class Day7 implements Callable<Integer> {
   private final static Integer ONE_PAIR = 2;
   private final static Integer ONE_CARD = 1;
 
+  public static boolean isJocker = false;
+
   @Option(names = {"-part1"})
   private boolean puzzleOne;
 
@@ -33,15 +32,16 @@ public class Day7 implements Callable<Integer> {
   @Override
   public Integer call() throws Exception {
     if (puzzleOne) {
+      isJocker = false;
       puzzle1("/input-day7-1.txt");
     }
     if (puzzleTwo) {
+      isJocker = true;
       puzzle2("/input-day7-2.txt");
     }
 
     return 0;
   }
-
 
   int puzzle1(String input) {
     int count = 0;
@@ -58,10 +58,6 @@ public class Day7 implements Callable<Integer> {
     scanner.close();
 
     arrayOfHands.sort(null);
-/*     for (int i = 0; i < arrayOfHands.size(); i++) {
-          System.out.println("hand: " + arrayOfHands.get(i));
-
-    } */
 
     for (int i = 0; i < arrayOfHands.size(); i++) {
       count += arrayOfHands.get(i).bid * (i + 1);
@@ -73,21 +69,76 @@ public class Day7 implements Callable<Integer> {
 
   int puzzle2(String input) {
     int count = 0;
+    Scanner scanner = new Scanner(FileOperations.loadInputs(input));
 
-    /*
-     * Scanner scanner = new Scanner(FileOperations.loadInputs(input));
-     * 
-     * while (scanner.hasNextLine()) { // Put code here
-     * 
-     * } scanner.close();
-     */
+    String currentLine;
+    ArrayList<Hand> arrayOfHands = new ArrayList<>();
+    while (scanner.hasNextLine()) {
+      currentLine = scanner.nextLine();
+      arrayOfHands
+          .add(new Hand(currentLine.split(" ")[0], Integer.parseInt(currentLine.split(" ")[1])));
+    }
+    scanner.close();
+
+    arrayOfHands.sort(null);
+
+    System.out.println("isJocker: " + isJocker);
+
+    for (int i = 0; i < arrayOfHands.size(); i++) {
+      // System.out.println("hand: " + arrayOfHands.get(i));
+      count += arrayOfHands.get(i).bid * (i + 1);
+    }
+
     System.out.println("Result: " + count);
-    return 0;
-  }
+    return count;
 
+  }
 
   public static Integer classifyPokerHand(String pokerHand) {
     String[] cards = pokerHand.split("");
+    int numberOfJ = StringUtils.countMatches(pokerHand, "J");
+    // System.out.println("pokerHand: " + pokerHand);
+    // System.out.println("numberOfJ: " + numberOfJ);
+
+    if (isJocker && numberOfJ != 0) {
+      if (numberOfJ == 5 || numberOfJ == 4) {
+        return FIVE_CARDS;
+      }
+      if (numberOfJ == 3) {
+        if (isOnePair(cards)) {
+          return FIVE_CARDS;
+        }
+        return FOUR_CARDS;
+      }
+
+      if (numberOfJ == 2) {
+        if (isThreeOfAKind(cards)) {
+          return FIVE_CARDS;
+        }
+        if (isOnePair(cards)) {
+          return FOUR_CARDS;
+        }
+        return THREE_CARDS;
+      }
+
+      if (numberOfJ == 1) {
+        if (isFourOfAKind(cards)) {
+          return FIVE_CARDS;
+        }
+        if (isThreeOfAKind(cards)) {
+          return FOUR_CARDS;
+        }
+        if (isTwoPairs(cards)) {
+          return FULL_HOUSE;
+        }
+        if (isOnePair(cards)) {
+          return THREE_CARDS;
+        }
+        if (isNumberOfAKind(cards, 1)) {
+          return ONE_PAIR;
+        }
+      }
+    }  
 
     if (isFiveOfAKind(cards)) {
       return FIVE_CARDS;
@@ -104,6 +155,8 @@ public class Day7 implements Callable<Integer> {
     } else {
       return ONE_CARD;
     }
+
+
   }
 
   private static boolean isFiveOfAKind(String[] cards) {
@@ -126,18 +179,22 @@ public class Day7 implements Callable<Integer> {
 
     for (String card : cards) {
       char value = card.charAt(0);
-      valueCount.put(value, valueCount.getOrDefault(value, 0) + 1);
+      if (value != 'J') {
+        valueCount.put(value, valueCount.getOrDefault(value, 0) + 1);
+      }
     }
 
     for (Integer value : valueCount.values()) {
-      if (value == 2) {
-        isAPair = true;
-      }
-      if (value == 3) {
-        isABrelan = true;
-      }
-      if (isAPair && isABrelan) {
-        return true;
+      if (value != 'J') {
+        if (value == 2) {
+          isAPair = true;
+        }
+        if (value == 3) {
+          isABrelan = true;
+        }
+        if (isAPair && isABrelan) {
+          return true;
+        }
       }
     }
 
@@ -150,9 +207,12 @@ public class Day7 implements Callable<Integer> {
 
     for (String card : cards) {
       char value = card.charAt(0);
-      valueCount.put(value, valueCount.getOrDefault(value, 0) + 1);
-      if (valueCount.get(value) == 2) {
-        pairCount++;
+      if (value != 'J') {
+        valueCount.put(value, valueCount.getOrDefault(value, 0) + 1);
+        if (valueCount.get(value) == 2) {
+          pairCount++;
+        }
+
       }
     }
 
@@ -168,9 +228,11 @@ public class Day7 implements Callable<Integer> {
 
     for (String card : cards) {
       char value = card.charAt(0);
-      valueCount.put(value, valueCount.getOrDefault(value, 0) + 1);
-      if (valueCount.get(value) == n) {
-        return true;
+      if (value != 'J') {
+        valueCount.put(value, valueCount.getOrDefault(value, 0) + 1);
+        if (valueCount.get(value) == n) {
+          return true;
+        }
       }
     }
 
@@ -182,22 +244,17 @@ public class Day7 implements Callable<Integer> {
     @Override
     public int compareTo(Object o) {
       Hand handToCompare = (Hand) o;
-
       if (classifyPokerHand(cards) > classifyPokerHand(handToCompare.cards)) {
         return 1;
       } else if (classifyPokerHand(cards) < classifyPokerHand(handToCompare.cards)) {
         return -1;
       }
 
-      //System.out.println("cards: " + cards);
-      //System.out.println("handToCompare.cards: " + handToCompare.cards);
       for (int i = 0; i < cards.length(); i++) {
-        //System.out.println("getIntForACard(cards.charAt(i): " + getIntForACard(cards.charAt(i)));
-        //System.out.println("getIntForACard(handToCompare.cards.charAt(i): " + getIntForACard(handToCompare.cards.charAt(i)));
-
         if (getIntForACard(cards.charAt(i)) > getIntForACard(handToCompare.cards.charAt(i))) {
           return 1;
-        } else if (getIntForACard(cards.charAt(i)) < getIntForACard(handToCompare.cards.charAt(i))) {
+        } else if (getIntForACard(cards.charAt(i)) < getIntForACard(
+            handToCompare.cards.charAt(i))) {
           return -1;
         }
       }
@@ -217,8 +274,6 @@ public class Day7 implements Callable<Integer> {
         return 12;
       case 'J':
         return 0;
-     
-        //return 11;
       case 'T':
         return 10;
       case '9':
