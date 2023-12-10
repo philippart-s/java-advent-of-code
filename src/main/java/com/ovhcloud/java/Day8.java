@@ -1,15 +1,10 @@
 package com.ovhcloud.java;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.concurrent.Callable;
 import org.apache.commons.math3.util.ArithmeticUtils;
-import com.ovhcloud.java.Day7.Hand;
 import com.ovhcloud.java.util.FileOperations;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -125,7 +120,7 @@ public class Day8 implements Callable<Integer> {
       j++;
       count = 0;
     }
-    
+
     count = res[0];
     for (int i = 1; i < res.length; i++) {
       count = ArithmeticUtils.lcm(count, res[i]);
