@@ -96,7 +96,7 @@ public class NewDay implements Callable<Integer> {
     
         """;
 
-    private final static String SOURCE_PATH = "/Users/sphilipp/dev/other/java-advent-of-code";
+    private final static String SOURCE_PATH = "/Users/stef/Dev/java-advent-of-code";
 
   @Parameters()
   private String day;
@@ -113,7 +113,7 @@ public class NewDay implements Callable<Integer> {
         .replace("INPUTN", "INPUT" + day.substring(3));
     Files.write(
         Paths.get(
-            "/Users/sphilipp/dev/other/java-advent-of-code/src/main/java/com/ovhcloud/java/" + day + ".java"),
+            SOURCE_PATH + "/src/main/java/com/ovhcloud/java/" + day + ".java"),
         dayFile.getBytes());
 
     Files.createFile(Paths.get( SOURCE_PATH + "/src/main/resources/input-" + day.toLowerCase() + "-1.txt"));
